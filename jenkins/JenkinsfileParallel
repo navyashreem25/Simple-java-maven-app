@@ -43,7 +43,8 @@ pipeline {
     }
     stage ("deploy-_dev")
     {
-        when { expression {params.select_environment == "dev"} beforeAgent True}
+        when { expression {params.select_environment == "dev"}
+        beforeAgent True}
         agent { label "devServer"}
         steps
         {
