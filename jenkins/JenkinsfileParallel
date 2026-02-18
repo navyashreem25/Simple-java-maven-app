@@ -1,0 +1,44 @@
+pipeline {
+    agent {
+  label 'Server1'
+        }
+    parameters {
+  string defaultValue: 'M', name: 'LASTNAME'
+}
+    environment {
+        NAME = "Navya"
+    }
+    tools {
+  maven 'mymaven'
+        }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+                echo "hello $NAME ${params.LASTNAME}"
+            }
+        }
+    }
+    Stage ('test') {
+        parallel {
+            stage('testA') {
+                steps{
+                echo " This is a testA"
+                }
+            }
+            
+            stage('testB') {
+                steps{
+                echo " This is a testB"
+                }
+            }
+        }
+        post {
+            success {
+                archiveArtifacts artifacts: '**/target/*,war'
+                }
+            }
+    }
+}
+
+
