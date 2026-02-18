@@ -3,7 +3,7 @@ pipeline {
   label 'Server1'
         }
     parameters {
-  string defaultValue: 'M', name: 'LASTNAME'
+  choice choices: ['dev', 'prod'], name: 'select_environment'
 }
     environment {
         NAME = "Navya"
