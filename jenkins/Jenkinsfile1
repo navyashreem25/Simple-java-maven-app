@@ -1,5 +1,7 @@
-pipipeline {
-    agent any
+pipeline {
+    agent {
+  label 'Server1'
+        }       
     stages {
         stage('Build') {
             steps {
