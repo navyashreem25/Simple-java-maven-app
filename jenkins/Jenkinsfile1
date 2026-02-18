@@ -2,6 +2,12 @@ pipeline {
     agent {
   label 'Server1'
         }
+    parameters {
+  string defaultValue: 'M', name: 'LASTNAME'
+}
+    environment {
+        NAME = "Navya"
+    }
     tools {
   maven 'mymaven'
         }
@@ -9,6 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn clean package'
+                echo "hello $NAME ${params.LASTNAME}"
             }
             post {
                 success {
