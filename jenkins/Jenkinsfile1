@@ -1,11 +1,7 @@
 pipeline {
-<<<<<<< HEAD
     agent {
   label 'Server1'
-        }       
-=======
-    agent any
->>>>>>> f1e15a0395065bc7e18fca748b6352f89323f215
+        }
     stages {
         stage('Build') {
             steps {
