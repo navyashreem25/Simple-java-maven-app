@@ -14,6 +14,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                script{
+                    file = load "script.groovy"
+                    file.hello()
+                }
                 sh 'mvn clean package'
                 echo "hello $NAME ${params.LASTNAME}"
             }
@@ -41,13 +45,35 @@ pipeline {
                 }
             }
     }
-    stage ("deploy-_dev")
+    stage ("deploy_dev")
     {
         when { 
             beforeAgent true
             expression {params.select_environment == "dev"}
         }
         agent { label "devServer"}
+        steps
+        {
+            timeout(time:5, unit:"DAYS"){
+                input message: "Deployment aproved?"
+            }
+            dir("/var/www/html")
+            {
+                unstash "maven-build"
+            }
+            sh """
+            cd /var/www/html/
+            jar -xvf webapp.war
+            """
+        }
+    }
+    stage ("deploy_prod")
+    {
+        when { 
+            beforeAgent true
+            expression {params.select_environment == "prod"}
+        }
+        agent { label "prodServer"}
         steps
         {
             dir("/var/www/html")
@@ -58,7 +84,7 @@ pipeline {
             cd /var/www/html/
             jar -xvf webapp.war
             """
-        }
+        }        
     }
     }
 }
